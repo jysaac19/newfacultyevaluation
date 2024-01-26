@@ -182,7 +182,7 @@ fun QuestionCard(
             shape = RoundedCornerShape(10.dp),
             enabled = viewModel.answeredQuestions.value >= 18
         ){
-            Text("Submit Form")
+            Text("Submit")
         }
     }
 

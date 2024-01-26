@@ -44,7 +44,8 @@ fun UserList(
             .border(1.dp, Color.Magenta),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "USER LIST", fontWeight = FontWeight.Bold, fontSize = 25.sp, modifier = Modifier
+        Text(text = "USER LIST", fontWeight = FontWeight.Bold, fontSize = 25.sp,
+            modifier = Modifier
             .height(50.dp)
             .fillMaxWidth()
             .background(
@@ -54,7 +55,7 @@ fun UserList(
             val users = viewModel.getAllUsers().observeAsState()
             Row(
                 modifier = Modifier
-                    .horizontalScroll(rememberScrollState())
+                    //.horizontalScroll(rememberScrollState())
 
                     .width(500.dp)
                     .verticalScroll(rememberScrollState())
@@ -65,7 +66,8 @@ fun UserList(
 
                 Column (
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.padding(10.dp)
+                    modifier = Modifier
+                        .padding(10.dp)
                 ){
 
                     Text(text = "User ID", textAlign = TextAlign.Center, modifier = Modifier
