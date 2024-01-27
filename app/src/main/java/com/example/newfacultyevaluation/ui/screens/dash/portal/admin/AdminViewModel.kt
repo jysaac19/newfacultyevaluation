@@ -135,4 +135,21 @@ class AdminViewModel(private val userRepository: UserRepository,
         }
     }
 
+    fun updateUser(user: User){
+        viewModelScope.launch {
+            adminRepo.updateUser(user)
+        }
+    }
+
+    fun updateFaculty(faculty: Faculty){
+        viewModelScope.launch {
+            adminRepo.updateFaculty(faculty)
+        }
+    }
+    fun updateStudent(student: Student){
+        viewModelScope.launch {
+            adminRepo.updateStudent(student)
+        }
+    }
+
 }

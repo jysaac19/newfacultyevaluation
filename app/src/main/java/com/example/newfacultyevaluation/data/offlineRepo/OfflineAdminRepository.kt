@@ -4,6 +4,9 @@ import com.example.newfacultyevaluation.dao.AdminDao
 import com.example.newfacultyevaluation.data.model.Admin
 import com.example.newfacultyevaluation.data.model.Course
 import com.example.newfacultyevaluation.data.model.CourseFaculty
+import com.example.newfacultyevaluation.data.model.Faculty
+import com.example.newfacultyevaluation.data.model.Student
+import com.example.newfacultyevaluation.data.model.User
 import com.example.newfacultyevaluation.data.repo.AdminRepo
 
 class OfflineAdminRepository(private val adminDao: AdminDao): AdminRepo{
@@ -23,5 +26,14 @@ class OfflineAdminRepository(private val adminDao: AdminDao): AdminRepo{
         adminDao.upsertCourse(course)
     }
 
+    override suspend fun updateUser(user: User){
+        adminDao.updateUser(user)
+    }
 
+    override suspend fun updateFaculty(faculty: Faculty){
+        adminDao.updateFaculty(faculty)
+    }
+    override suspend fun updateStudent(student: Student){
+        adminDao.updateStudent(student)
+    }
 }

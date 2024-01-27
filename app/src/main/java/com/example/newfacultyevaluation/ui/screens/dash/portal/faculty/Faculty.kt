@@ -32,6 +32,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -63,14 +64,36 @@ fun FacultyPortal(
 
     /*
         Select courses
-        Course Name, Total Students, , Rating
+        Course Name, Total Students, Rating
      */
-   Column {
-       val courses = viewModel.getCourses(loginViewModel.userID).observeAsState()
-       courses.value?.forEach {
-           Text(text = "Course ID: ${it.courseCode}")
-           Text(text = "Faculty ID: ${it.facultyID}")
+   Row(
+
+   ) {
+       val courses by viewModel.getCourses(loginViewModel.userID).observeAsState()
+       val studentAnswered by viewModel.getStudentCountAnswered(loginViewModel.userID).observeAsState()
+       val rating by viewModel.getOverallPoints(loginViewModel.userID).observeAsState()
+       Column {
+
+           Text(text = "Course Name")
+           courses?.forEach {
+               Text(text = it.courseName)
+           }
        }
+       Column {
+
+           Text(text = "Student Answered")
+           Text(text = studentAnswered.toString())
+       }
+       Column {
+           Text(text = "Ratings")
+           Text(text = rating.toString())
+       }
+
+
+   }
+    Column(
+        verticalArrangement = Arrangement.Bottom
+    ) {
        val context1 = LocalContext.current
        Button(
            onClick = {
@@ -86,7 +109,7 @@ fun FacultyPortal(
        ) {
            Text(text = "Log out")
        }
-   }
+    }
 
 
 }

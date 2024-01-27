@@ -9,6 +9,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.newfacultyevaluation.data.model.Course
 import com.example.newfacultyevaluation.data.model.CourseFaculty
 import com.example.newfacultyevaluation.data.model.CourseStudent
+import com.example.newfacultyevaluation.data.model.Faculty
+import com.example.newfacultyevaluation.data.model.Form
 import com.example.newfacultyevaluation.data.model.FormStudentFaculty
 import com.example.newfacultyevaluation.data.model.StudentFaculty
 import com.example.newfacultyevaluation.data.repo.StudentRepo
@@ -61,7 +63,7 @@ class StudentViewModel(private val studentRepo: StudentRepo) : ViewModel() {
     }
     fun upsertFormStudentFaculty(formStudentFaculty: FormStudentFaculty){
         viewModelScope.launch {
-            // studentRepo.upsertFormStudentFaculty(formStudentFaculty)
+             studentRepo.upsertFormStudentFaculty(formStudentFaculty)
         }
     }
     fun getCoursesByStudentID(id: String): LiveData<List<Course>>{
@@ -72,13 +74,19 @@ class StudentViewModel(private val studentRepo: StudentRepo) : ViewModel() {
         return studentRepo.getAllCourses()
     }
 
-    fun getStudentFaculty(id: String, selectedCourse: String): LiveData<String>{
+    fun getStudentFaculty(id: String, selectedCourse: String): LiveData<Faculty>{
         return studentRepo.getStudentFaculty(id, selectedCourse)
     }
 
     fun deleteCourse(courseStudent: CourseStudent){
         viewModelScope.launch {
             studentRepo.deleteCourse(courseStudent)
+        }
+    }
+
+    fun upsertForm(form: Form){
+        viewModelScope.launch {
+            studentRepo.upsertForm(form)
         }
     }
 }

@@ -5,6 +5,9 @@ import com.example.newfacultyevaluation.dao.StudentDao
 import com.example.newfacultyevaluation.data.model.Course
 import com.example.newfacultyevaluation.data.model.CourseFaculty
 import com.example.newfacultyevaluation.data.model.CourseStudent
+import com.example.newfacultyevaluation.data.model.Faculty
+import com.example.newfacultyevaluation.data.model.Form
+import com.example.newfacultyevaluation.data.model.FormStudentFaculty
 import com.example.newfacultyevaluation.data.model.Student
 import com.example.newfacultyevaluation.data.model.StudentFaculty
 import com.example.newfacultyevaluation.data.repo.StudentRepo
@@ -14,13 +17,9 @@ class OfflineStudentRepository(private val studentDao: StudentDao): StudentRepo 
         studentDao.upsertStudent(student)
     }
 
-//    override suspend fun upsertFormStudentFaculty(
-//        formID: Int,
-//        studentID: String,
-//        facultyID: String
-//    ) {
-//        TODO("Not yet implemented")
-//    }
+    override suspend fun upsertFormStudentFaculty(formStudentFaculty: FormStudentFaculty) {
+        studentDao.upsertFormStudentFaculty(formStudentFaculty)
+    }
 //
     override suspend fun upsertCourseStudent(courseStudent: CourseStudent) {
         studentDao.upsertCourseStudent(courseStudent)
@@ -42,7 +41,7 @@ class OfflineStudentRepository(private val studentDao: StudentDao): StudentRepo 
         return studentDao.getAllCourses()
     }
 
-    override fun getStudentFaculty(id: String, selectedCourse: String): LiveData<String> {
+    override fun getStudentFaculty(id: String, selectedCourse: String): LiveData<Faculty> {
         return studentDao.getStudentFaculty(id, selectedCourse)
     }
 
@@ -50,7 +49,7 @@ class OfflineStudentRepository(private val studentDao: StudentDao): StudentRepo 
         studentDao.deleteCourse(courseStudent)
     }
 
-//    override fun getStudentFaculty(): LiveData<List<StudentFaculty>> {
-//        TODO("Not yet implemented")
-//    }
+    override suspend fun upsertForm(form: Form){
+        studentDao.upsertForm(form)
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.newfacultyevaluation.ui.screens.dash.portal.student
 
 import android.widget.RadioGroup
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -38,6 +39,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.newfacultyevaluation.data.model.Course
+import com.example.newfacultyevaluation.data.model.Form
+import com.example.newfacultyevaluation.data.model.FormStudentFaculty
 import com.example.newfacultyevaluation.data.model.Question
 import com.example.newfacultyevaluation.data.model.questions
 import com.example.newfacultyevaluation.ui.nav.StudentNav
@@ -74,7 +77,7 @@ fun Form(
             .padding(20.dp),
     ){
 
-        QuestionCard(viewModel, loginViewModel, selectedCourse)
+        QuestionCard(navController,viewModel, loginViewModel, selectedCourse)
 
     }
 
@@ -84,14 +87,17 @@ fun Form(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun QuestionCard(
+    navController: NavController,
     viewModel: StudentViewModel,
     loginViewModel: LoginViewModel,
     selectedCourse: String
 ){
     val points = listOf(4,3,2,1)
     val faculty = viewModel.getStudentFaculty(loginViewModel.userID, selectedCourse).observeAsState()
-
-    Text(text = "Evaluation for Mr./Ms. ${faculty.value}".uppercase(), textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth(), fontWeight = FontWeight.Bold, fontSize = 15.sp)
+    val feedbacks by remember {
+        mutableStateOf(mutableListOf(""))
+    }
+    Text(text = "Evaluation for Mr./Ms. ${faculty.value?.fullName}".uppercase(), textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth(), fontWeight = FontWeight.Bold, fontSize = 15.sp)
     Text(text = "Answered Questions: ${viewModel.answeredQuestions.value}")
     Text(text = "Total Points: ${viewModel.totalPoints.value}")
 
@@ -154,13 +160,13 @@ fun QuestionCard(
                             onValueChange = {
                                 feedback = it
                                 viewModel.markQuestionAnswered(questionId = question.id)
-
                             },
                             label = { Text(text = "Comment")}
                         )
 
                     }
                 }
+                feedbacks.add(feedback)
             }
 
 
@@ -171,10 +177,17 @@ fun QuestionCard(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
+        val context = LocalContext.current
         Button(
             onClick = {
+                viewModel.upsertFormStudentFaculty(FormStudentFaculty(viewModel.formID.value, loginViewModel.userID, faculty.value?.facultyID.toString()))
+                feedbacks.forEach {
+                    viewModel.upsertForm(Form(viewModel.formID.value, overallPoints = viewModel.totalPoints.value, feedback = it))
+                }
 
+                Toast.makeText(context, "Form submitted", Toast.LENGTH_SHORT).show()
+                navController.popBackStack()
+                navController.navigate(StudentNav.HOME.name)
             },
             modifier = Modifier
                 .height(50.dp)
